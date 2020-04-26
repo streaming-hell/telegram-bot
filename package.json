@@ -44,7 +44,7 @@
     "@types/hapi__joi": "16.0.12",
     "@types/jest": "25.2.1",
     "@types/mongoose": "5.7.13",
-    "@types/node": "13.13.2",
+    "@types/node": "13.13.3",
     "@types/supertest": "2.0.8",
     "@typescript-eslint/eslint-plugin": "2.29.0",
     "@typescript-eslint/parser": "2.29.0",
