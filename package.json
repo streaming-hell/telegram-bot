@@ -30,7 +30,7 @@
     "class-transformer": "0.2.3",
     "class-validator": "0.12.2",
     "lodash": "4.17.15",
-    "mongoose": "5.9.10",
+    "mongoose": "5.9.11",
     "nestjs-telegraf": "1.1.0",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
