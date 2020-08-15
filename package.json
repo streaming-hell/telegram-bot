@@ -30,7 +30,7 @@
     "@nestjs/platform-express": "7.0.9",
     "class-transformer": "0.3.1",
     "class-validator": "0.12.2",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "mongoose": "5.10.0",
     "nestjs-telegraf": "1.2.1",
     "reflect-metadata": "0.1.13",
