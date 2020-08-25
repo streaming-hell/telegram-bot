@@ -8,13 +8,14 @@ import {
 import { On, Context, Extra } from 'nestjs-telegraf';
 import { chain, map, sortBy } from 'lodash';
 import { map as rxMap, catchError } from 'rxjs/operators';
-import { UsersService } from '../users/users.service';
 import {
   LISTEN_PROVIDERS,
   BUY_PROVIDERS,
   PROVIDERS_DICTIONARY,
 } from './song-link-pm.constants';
 import { ShazamService } from '../shazam/shazam.service';
+import { VkService } from '../vk/vk.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class SongLinkPmService {
@@ -22,6 +23,7 @@ export class SongLinkPmService {
   constructor(
     private readonly httpService: HttpService,
     private readonly shazamService: ShazamService,
+    private readonly vkService: VkService,
     private readonly usersService: UsersService,
   ) {}
 
@@ -40,9 +42,14 @@ export class SongLinkPmService {
       return LISTEN_PROVIDERS.includes(item.providerName);
     });
 
+    const entity = odesliResponse.entitiesByUniqueId[odesliResponse.entityUniqueId];
+    const songTitle = `${entity.artistName} – ${entity.title}`;
+    const vkUrl = this.vkService.getSearchLink(songTitle);
+
     const listenMessage = chain(listenLinks)
       .map(item => `[${item.displayName}](${item.url})\n`)
       .value()
+      .concat(`[VK](${vkUrl})\n`) // add link on vk
       .join('');
 
     const buyLinks = linksSorted.filter(item => {
