@@ -1,0 +1,34 @@
+---
+LISTEN: "🎧 *Listen*\n"
+BUY: "🛍 *Buy*\n"
+NO_DATA_BY_LINK: "Unfortunately we do not have data for this link 😕"
+NO_MUSIC_LINKS_IN_MESSAGE: 'No links to music services were found in the message'
+SERVICES_COMMAND_REPLY: |
+  Currently, the bot supports the following services:
+
+  Apple Music
+  Amazon Music
+  Amazon Store
+  Deezer
+  Google Music
+  Google Play
+  iTunes
+  Napster
+  Pandora
+  SoundCloud
+  Spinrilla
+  Spotify
+  Shazam
+  Tidal
+  Yandex.Music
+  YouTube
+  YouTube Music
+  VK (partially)
+START_COMMAND_REPLY: |-
+  👋 Hello!
+
+  My main function is to search for music on all (almost) streaming services.
+
+  Send me a link or several links to a track or album from any streaming service, and in return I will send links to other services where I found your track or album.
+
+  The list of currently supported services can be obtained with the command /services

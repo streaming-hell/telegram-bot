@@ -19,7 +19,6 @@ import { mongooseModule } from './core/configs/mongoose-module.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development.local', '.env.development'],
       load: [app, mongooseModule, telegrafModule],
       validationOptions,
       validationSchema,

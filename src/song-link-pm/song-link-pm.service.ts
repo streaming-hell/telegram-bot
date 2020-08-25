@@ -5,8 +5,8 @@ import {
   Logger,
   HttpService,
 } from '@nestjs/common';
-import { TelegrafOn } from 'nestjs-telegraf';
-import { Context, Extra } from 'telegraf';
+import { TelegrafOn, Context } from 'nestjs-telegraf';
+import { Extra } from 'telegraf';
 import { chain, map, sortBy } from 'lodash';
 import { map as rxMap, catchError } from 'rxjs/operators';
 import { UsersService } from '../users/users.service';
@@ -27,10 +27,7 @@ export class SongLinkPmService {
   ) {}
 
   /* Reply with links to other streaming services */
-  private async replyFindedLinks(
-    ctx: Context,
-    odesliResponse: any,
-  ) {
+  private async replyFindedLinks(ctx: Context, odesliResponse: any) {
     const links = map(odesliResponse.linksByPlatform, (value, key) => {
       return {
         providerName: key,
@@ -38,28 +35,30 @@ export class SongLinkPmService {
         ...value,
       };
     });
-    const linksSorted = sortBy(links, [i => i.displayName]);
+    const linksSorted = sortBy(links, [(i) => i.displayName]);
 
-    const listenLinks = linksSorted.filter(item => {
+    const listenLinks = linksSorted.filter((item) => {
       return LISTEN_PROVIDERS.includes(item.providerName);
     });
 
     const listenMessage = chain(listenLinks)
-      .map(item => `[${item.displayName}](${item.url})\n`)
+      .map((item) => `[${item.displayName}](${item.url})\n`)
       .value()
       .join('');
 
-    const buyLinks = linksSorted.filter(item => {
+    const buyLinks = linksSorted.filter((item) => {
       return BUY_PROVIDERS.includes(item.providerName);
     });
 
     const buyMessage = chain(buyLinks)
-      .map(item => `[${item.displayName}](${item.url})\n`)
+      .map((item) => `[${item.displayName}](${item.url})\n`)
       .value()
       .join('');
 
     await ctx.reply(
-      `🎧 *Слушать*\n\n${listenMessage}\n\n🛍 *Купить*\n\n${buyMessage}`,
+      `${ctx.i18n.t('LISTEN')}${listenMessage}\n${ctx.i18n.t(
+        'BUY',
+      )}${buyMessage}`,
       {
         parse_mode: 'Markdown',
         disable_web_page_preview: true,
@@ -69,11 +68,7 @@ export class SongLinkPmService {
   }
 
   /* Reply with info about searched song */
-  private async replySearchedSongInfo(
-    ctx: Context,
-    res: any,
-    url: string,
-  ) {
+  private async replySearchedSongInfo(ctx: Context, res: any, url: string) {
     /* Extract searched entity in odesli response */
     const entity = res.entitiesByUniqueId[res.entityUniqueId];
     const { thumbnailUrl, artistName, title } = entity;
@@ -105,12 +100,13 @@ export class SongLinkPmService {
   }
 
   private songLinksNotFound(ctx) {
-    ctx.reply('К сожалению у нас нет данных по этой ссылке 😕');
+    ctx.reply(ctx.i18n.t('NO_DATA_BY_LINK'));
   }
 
   private songLinksNotFoundInMessage(ctx) {
-    ctx.reply('В сообщении не найдены ссылки на музыкальные сервисы');
+    ctx.reply(ctx.i18n.t('NO_MUSIC_LINKS_IN_MESSAGE'));
   }
+
   public findUrlsInMessage(message: string): string[] {
     const urlRegExp: RegExp = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
     return message.match(urlRegExp);
@@ -166,12 +162,14 @@ export class SongLinkPmService {
         try {
           const data = await this.httpService
             .get('/links/byUrl', { params: { url } })
-            .pipe(rxMap(response => response.data))
-            .pipe(catchError((e) => {
-              console.error(e);
-              this.logger.error(`Error on API request ${e}`);
-              throw new Error();
-            }),)
+            .pipe(rxMap((response) => response.data))
+            .pipe(
+              catchError((e) => {
+                console.error(e);
+                this.logger.error(`Error on API request ${e}`);
+                throw new Error();
+              }),
+            )
             .toPromise();
           if (!data) this.songLinksNotFound(ctx);
           await this.replySearchedSongInfo(ctx, data, url);
