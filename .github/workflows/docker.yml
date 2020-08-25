@@ -15,7 +15,7 @@ on:
 
 env:
   # TODO: Change variable to your image's name.
-  IMAGE_NAME: streaming-hell-telegram-bot
+  IMAGE_NAME: telegram-bot
 
 jobs:
   # Run tests.
