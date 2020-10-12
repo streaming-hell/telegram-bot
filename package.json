@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.17.10",
-    "@graphql-codegen/introspection": "^1.17.8",
+    "@graphql-codegen/introspection": "^1.18.0",
     "@graphql-codegen/typescript": "1.17.10",
     "@graphql-codegen/typescript-resolvers": "^1.17.8",
     "@nestjs/cli": "7.5.1",
